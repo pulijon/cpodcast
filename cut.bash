@@ -11,16 +11,19 @@ do
 		-c:a libmp3lame \
 		-ar 44100 \
 		-ac 2 \
-		-metadata "title=$3" \
-		-metadata "track=$(printf '%03d' $i)/$(printf '%03d' $numtracks)" \
 		T_$track 
 		# -i $track
 		# -map_metadata 0:1
+	id3tool -a $1 \
+	        -c $i \
+			-t "Corte $i de $numtracks" \
+			T_$track
 	echo $i/$numtracks
 	if [ ! -z $4 ] && [ -d $4 ]
 	then
 		echo Copiando T_$track a $4
 		cp T_$track $4
+		sync $4/T_$track
 	fi
 	((i+=1))
 done
